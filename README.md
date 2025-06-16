@@ -5,14 +5,15 @@ Criar um aplicativo para consultar a API coinapi.io e trazer as exchanges em for
 Features
 - Tela de listagem: Exibir, pelo menos, os campos: name, exchange_id e volume_1day_usd. Ao tocar em um item deve ser exibida a tela de detalhes.
 - Tela de detalhe: Exibe os detalhes da exchange.
-** Observação: trocar o texto SUA_API_KEY_AQUI por sua API KEY
+  
+**Observação:** trocar o texto SUA_API_KEY_AQUI por sua API KEY
 
 ## Telas
 <p float="left">
-  <img src="assets/Splash.png" width="120" />
-  <img src="assets/Error.png" width="120" />
-  <img src="assets/Loading.png" width="120" />
-  <img src="assets/List.png" width="120" />
+  <img src="assets/Splash.png" width="120" style="margin-right:20px;" />
+  <img src="assets/Error.png" width="120" style="margin-right:20px;" />
+  <img src="assets/Loading.png" width="120" style="margin-right:20px;" />
+  <img src="assets/List.png" width="120" style="margin-right:20px;" />
   <img src="assets/Detail.png" width="120" />
 </p>
 
