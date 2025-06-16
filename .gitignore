@@ -1,0 +1,68 @@
+# Diretórios padrão do sistema
+.DS_Store
+Thumbs.db
+
+# Android Studio
+.idea/
+*.iml
+.gradle/
+local.properties
+
+# Build
+/build/
+/*/build/
+!gradle-wrapper.jar
+
+# Arquivos de log e cache
+*.log
+*.cache
+*.keystore
+*.jks
+*.apk
+*.ap_
+*.dex
+*.class
+
+# Arquivos temporários
+*.tmp
+*.temp
+*.swp
+
+# Gradle
+.gradle/
+**/build/
+!**/src/**/build/
+
+# IntelliJ
+out/
+
+# Arquivos do sistema operacional
+ehthumbs.db
+Icon?
+Desktop.ini
+
+# Arquivos de backup
+*.bak
+*.orig
+
+# Arquivos de configuração pessoais
+/captures/
+/.externalNativeBuild
+.cxx/
+
+# NDK / CMake
+obj/
+
+# Testes
+test-output/
+
+# Firebase
+google-services.json
+app/google-services.json
+
+# Arquivos de ambiente
+.env
+.env.*
+
+# Kotest e snapshots
+.snapshots/
