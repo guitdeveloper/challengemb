@@ -13,7 +13,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import br.com.challenge.core.presentation.R
 
 @Composable
 fun LoadingComponent(
@@ -22,7 +24,7 @@ fun LoadingComponent(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .testTag("loading"),
+            .testTag(LOADING),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -34,7 +36,7 @@ fun LoadingComponent(
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "Carregando...",
+                text = stringResource(R.string.loading_message),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )

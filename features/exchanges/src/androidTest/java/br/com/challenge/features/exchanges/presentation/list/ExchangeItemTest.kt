@@ -41,9 +41,7 @@ class ExchangeItemTest {
             ExchangeItem(exchange = fakeExchange, onClick = { clicked = true })
         }
 
-        // Clica em qualquer texto dentro do Card
         composeTestRule.onNodeWithText("Binance").performClick()
-
         assert(clicked)
     }
 }

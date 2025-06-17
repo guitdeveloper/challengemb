@@ -9,7 +9,7 @@ object DateUtils {
     fun formatIsoDate(
         isoDate: String,
         outputPattern: String = "dd/MM/yyyy",
-    ): String {
+    ): String? {
         return try {
             val inputFormat = java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS'Z'", Locale.US)
             inputFormat.timeZone = TimeZone.getTimeZone("UTC")
@@ -18,7 +18,7 @@ object DateUtils {
             outputFormat.format(date!!)
         } catch (e: Exception) {
             Log.e("PresentationError", "Erro ao executar conversão de data", e)
-            "Data inválida"
+            null
         }
     }
 }

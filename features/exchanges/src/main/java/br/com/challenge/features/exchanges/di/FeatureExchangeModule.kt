@@ -1,6 +1,7 @@
 package br.com.challenge.features.exchanges.di
 
 import br.com.challenge.core.network.di.ApiConfig
+import br.com.challenge.core.presentation.utils.ChromeCustomTabNavigator
 import br.com.challenge.features.exchanges.data.repository.ExchangeRepositoryImpl
 import br.com.challenge.features.exchanges.domain.repository.ExchangeRepository
 import br.com.challenge.features.exchanges.domain.usecase.GetExchangeDetailUseCase
@@ -13,6 +14,8 @@ import org.koin.core.parameter.parametersOf
 import org.koin.dsl.module
 
 val featureExchangeModule = module {
+    single { ChromeCustomTabNavigator() }
+
     factory<ExchangeRepository> { (apiConfig: ApiConfig) ->
         ExchangeRepositoryImpl(
             apiService = get { parametersOf(apiConfig.baseUrl, apiConfig.headers) },

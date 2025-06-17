@@ -5,7 +5,7 @@ import android.annotation.SuppressLint
 object CurrencyUtils {
 
     @SuppressLint("DefaultLocale")
-    fun formatCurrencyAbbreviated(currency: Double?): String {
+    fun formatCurrencyAbbreviated(currency: Double?): String? {
         return currency?.let {
             val units = arrayOf("", "K", "M", "B", "T")
             var value = it
@@ -17,6 +17,6 @@ object CurrencyUtils {
             }
 
             "$%.2f%s".format(value, units[index])
-        } ?: "N/A"
+        }
     }
 }

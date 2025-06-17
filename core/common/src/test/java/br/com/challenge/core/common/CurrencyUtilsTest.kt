@@ -10,7 +10,7 @@ class CurrencyUtilsTest {
     @DisplayName("formatCurrencyAbbreviated")
     @ParameterizedTest(name = " = {1}")
     @CsvSource(
-        "null, N/A",
+        "null, null",
         "999.99, '$999,99'",
         "123456, '$123,46K'",
         "2345678, '$2,35M'",
@@ -20,6 +20,6 @@ class CurrencyUtilsTest {
     fun `should format currency correctly`(input: String?, expected: String) {
         val value = input?.takeIf { it != "null" }?.toDoubleOrNull()
         val actual = CurrencyUtils.formatCurrencyAbbreviated(value)
-        assertEquals(expected, actual)
+        assertEquals(expected, "$actual")
     }
 }

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="exchange_list_title">Exchanges</string>
+    <string name="exchange_details_title">Detalhes da Exchange</string>
+    <string name="exchange_name_unknown">Nome não disponível</string>
+    <string name="exchange_details_group_data_volume">Informações de Volume</string>
+    <string name="exchange_details_volume_24h">Volume 24h (USD)</string>
+    <string name="exchange_details_volume_1h">Volume 1h (USD)</string>
+    <string name="exchange_details_volume_30d">Volume 30d (USD)</string>
+    <string name="exchange_details_group_data">Informações de Dados</string>
+    <string name="exchange_details_symbols">Símbolos Disponíveis</string>
+    <string name="exchange_details_data_start">Início dos Dados</string>
+    <string name="exchange_details_data_end">Fim dos Dados</string>
+    <string name="exchange_details_trading_start">Início Trading</string>
+    <string name="exchange_details_trading_end">Fim Trading</string>
+</resources>

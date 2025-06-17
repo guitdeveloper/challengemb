@@ -28,13 +28,13 @@ class DateUtilsTest {
             val expected = "15 jun. 2023"
 
             val actual = DateUtils.formatIsoDate(isoDate, pattern)
-            assertEquals(expected, actual.lowercase(Locale("pt", "BR")))
+            assertEquals(expected, actual?.lowercase(Locale("pt", "BR")))
         }
 
         @Test
-        fun `should return 'Data inválida' when given invalid date`() {
+        fun `should return null when given invalid date`() {
             val isoDate = "invalid-date"
-            val expected = "Data inválida"
+            val expected = null
             mockkStatic(Log::class)
             every { Log.e(any(), any(), any()) } returns 0
             val actual = DateUtils.formatIsoDate(isoDate)

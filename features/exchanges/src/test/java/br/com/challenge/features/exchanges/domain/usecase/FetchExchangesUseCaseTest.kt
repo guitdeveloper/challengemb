@@ -10,8 +10,9 @@ import kotlinx.coroutines.test.runTest
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import io.mockk.unmockkAll
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -39,9 +40,9 @@ class FetchExchangesUseCaseTest {
         lastUpdated = System.currentTimeMillis() - 10_000L
     )
 
-    @BeforeEach
-    fun setup() {
-        // Reseta mocks se precisar
+    @AfterEach
+    fun tearDown() {
+        unmockkAll()
     }
 
     @Test
@@ -56,7 +57,6 @@ class FetchExchangesUseCaseTest {
         assertEquals(2, results.size)
         assertTrue(results[0].isSuccess)
         assertTrue(results[1].isSuccess)
-
         coVerify(exactly = 1) { repository.fetchExchanges() }
     }
 
@@ -72,7 +72,6 @@ class FetchExchangesUseCaseTest {
         assertEquals(2, results.size)
         assertTrue(results[0].isSuccess)
         assertTrue(results[1].isSuccess)
-
         coVerify(exactly = 1) { repository.fetchExchanges() }
     }
 
@@ -86,7 +85,6 @@ class FetchExchangesUseCaseTest {
 
         assertEquals(1, results.size)
         assertTrue(results[0].isSuccess)
-
         coVerify(exactly = 0) { repository.fetchExchanges() }
     }
 

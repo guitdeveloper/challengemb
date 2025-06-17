@@ -39,6 +39,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.retrofit)
 
+    testImplementation(libs.test.robolectric)
     testImplementation(project(":core:tests"))
 }
 

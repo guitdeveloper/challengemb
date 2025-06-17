@@ -20,14 +20,8 @@ class ErrorComponentTest {
                 onRetry = {}
             )
         }
-
-        // Verifica se o título padrão aparece
         composeTestRule.onNodeWithText("Ops! Algo deu errado").assertExists()
-
-        // Verifica se a mensagem personalizada aparece
         composeTestRule.onNodeWithText(testMessage).assertExists()
-
-        // Verifica se o botão "Tentar Novamente" aparece
         composeTestRule.onNodeWithText("Tentar Novamente").assertExists()
     }
 
@@ -40,7 +34,6 @@ class ErrorComponentTest {
                 onRetry = { clicked = true }
             )
         }
-
         composeTestRule.onNodeWithText("Tentar Novamente").performClick()
         assert(clicked)
     }

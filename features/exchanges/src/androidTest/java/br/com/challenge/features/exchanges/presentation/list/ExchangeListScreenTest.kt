@@ -112,7 +112,6 @@ class ExchangeListScreenTest {
         verify { navController.navigate("exchange_detail/kraken") }
     }
 
-    // Helper
     private fun mockExchangeViewModel(
         state: UiState<Boolean>,
         pagingData: PagingData<ExchangeResume>

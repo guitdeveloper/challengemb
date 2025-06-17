@@ -1,4 +1,3 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
 import com.android.build.api.dsl.CommonExtension
 
 plugins {
@@ -24,6 +23,7 @@ subprojects {
     afterEvaluate {
         if (plugins.hasPlugin("com.android.application") || plugins.hasPlugin("com.android.library")) {
             configureLintOptions()
+            configurePackagingOptions(this)
         }
 
         tasks.findByName("check")?.let { checkTask ->
@@ -64,6 +64,22 @@ fun Project.configureLintOptions() {
             checkDependencies = false
             htmlReport = true
             xmlReport = true
+        }
+    }
+}
+
+fun configurePackagingOptions(project: Project) {
+    project.extensions.findByType<com.android.build.gradle.BaseExtension>()?.apply {
+        packagingOptions {
+            resources {
+                excludes += setOf(
+                    "/META-INF/LICENSE.md",
+                    "/META-INF/LICENSE-notice.md",
+                    "/META-INF/DEPENDENCIES",
+                    "/META-INF/AL2.0",
+                    "/META-INF/LGPL2.1"
+                )
+            }
         }
     }
 }

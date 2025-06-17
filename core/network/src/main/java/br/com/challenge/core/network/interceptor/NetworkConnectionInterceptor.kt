@@ -12,9 +12,7 @@ class NetworkConnectionInterceptor(
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val isConnected = NetworkUtils(context).isNetworkAvailable()
-        if (!isConnected) {
-            throw NoConnectivityException()
-        }
+        if (!isConnected) throw NoConnectivityException()
         return chain.proceed(chain.request())
     }
 }

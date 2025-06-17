@@ -32,7 +32,7 @@ class ExchangeRepositoryImpl(
         try {
             exchangeDao.getExchangeBy(exchangeId)?.let {
                 emit(Result.success(it.toDetail()))
-            } ?: emit(Result.failure(Exception("Exchange not found for ID $exchangeId")))
+            } ?: emit(Result.failure(Exception("Exchange não encontrada para exchange ID '$exchangeId'")))
         } catch (e: Exception) {
             emit(Result.failure(e))
         }
@@ -59,7 +59,7 @@ class ExchangeRepositoryImpl(
             Result.success(true)
         } else {
             Result.failure(
-                Exception("API fail: ${exchangesResponse.code()} - ${exchangesResponse.message()}")
+                Exception("Falha na API: ${exchangesResponse.code()} - ${exchangesResponse.message()}")
             )
         }
     }

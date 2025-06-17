@@ -42,23 +42,13 @@ android {
         kotlinCompilerExtensionVersion = "1.5.8"
     }
 
-    packaging {
-        resources {
-            excludes += setOf(
-                "META-INF/LICENSE.md",
-                "META-INF/LICENSE-notice.md",
-                "META-INF/NOTICE.md",
-                "META-INF/DEPENDENCIES",
-                "META-INF/versions/9/OSGI-INF/MANIFEST.MF"
-            )
-        }
-    }
 }
 
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.browser)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.compose)

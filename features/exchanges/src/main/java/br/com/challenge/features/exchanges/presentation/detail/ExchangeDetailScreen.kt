@@ -1,7 +1,5 @@
 package br.com.challenge.features.exchanges.presentation.detail
 
-import androidx.browser.customtabs.CustomTabColorSchemeParams
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -30,21 +27,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import org.koin.androidx.compose.koinViewModel
-import androidx.core.net.toUri
 import br.com.challenge.core.common.CurrencyUtils.formatCurrencyAbbreviated
 import br.com.challenge.core.common.DateUtils.formatIsoDate
 import br.com.challenge.core.network.di.ApiConfig
+import br.com.challenge.core.presentation.component.DetailRow
 import br.com.challenge.core.presentation.component.ErrorComponent
 import br.com.challenge.core.presentation.component.LoadingComponent
 import br.com.challenge.core.presentation.state.UiState
+import br.com.challenge.core.presentation.utils.ChromeCustomTabNavigator
+import br.com.challenge.features.exchanges.R
+import br.com.challenge.core.presentation.R as commonPresentation
 import br.com.challenge.features.exchanges.domain.Exchange
-import br.com.challenge.features.exchanges.presentation.list.ExchangeViewModel
+import org.koin.compose.getKoin
 import org.koin.core.parameter.parametersOf
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -55,7 +55,7 @@ fun ExchangeDetailScreen(
     apiConfig: ApiConfig,
     viewModel: ExchangeDetailViewModel = koinViewModel(
         parameters = { parametersOf(apiConfig) }
-    )
+    ),
 ) {
     LaunchedEffect(exchangeId) {
         viewModel.loadExchangeDetail(exchangeId)
@@ -66,7 +66,7 @@ fun ExchangeDetailScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = "Detalhes da Exchange",
+                        text = stringResource(R.string.exchange_details_title),
                         style = MaterialTheme.typography.headlineSmall
                     )
                 },
@@ -74,7 +74,7 @@ fun ExchangeDetailScreen(
                     IconButton(onClick = onBackClick) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Voltar"
+                            contentDescription = stringResource(commonPresentation.string.button_back)
                         )
                     }
                 },
@@ -96,13 +96,13 @@ fun ExchangeDetailScreen(
             is UiState.Success -> {
                 ExchangeDetailContent(
                     exchange = state.data,
-                    modifier = Modifier.padding(paddingValues)
+                    modifier = Modifier.padding(paddingValues),
                 )
             }
 
             is UiState.Error -> {
                 ErrorComponent(
-                    message = state.exception.message ?: "Erro desconhecido",
+                    message = state.exception.message ?: stringResource(commonPresentation.string.error_unknown),
                     onRetry = { viewModel.retry(exchangeId) },
                     modifier = Modifier.padding(paddingValues)
                 )
@@ -130,7 +130,10 @@ private fun ExchangeDetailContent(
 }
 
 @Composable
-private fun Header(exchange: Exchange) {
+fun Header(
+    exchange: Exchange,
+    webNavigator: ChromeCustomTabNavigator = getKoin().get()
+) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
@@ -144,7 +147,7 @@ private fun Header(exchange: Exchange) {
                 .padding(20.dp)
         ) {
             Text(
-                text = exchange.name ?: "Nome não disponível",
+                text = exchange.name ?: stringResource(R.string.exchange_name_unknown),
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -166,26 +169,12 @@ private fun Header(exchange: Exchange) {
                     color = MaterialTheme.colorScheme.primary,
                     textDecoration = TextDecoration.Underline,
                     modifier = Modifier.clickable {
-                        openChromeCustomTab(context, url, Color.LightGray)
+                        webNavigator.openChromeCustomTab(context, url, Color.LightGray)
                     }
                 )
             }
         }
     }
-}
-
-fun openChromeCustomTab(
-    context: android.content.Context,
-    url: String,
-    toolbarColor: Color
-) {
-    val builder = CustomTabsIntent.Builder().apply {
-        setDefaultColorSchemeParams(CustomTabColorSchemeParams.Builder().setToolbarColor(toolbarColor.toArgb()).build())
-        setStartAnimations(context, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-        setExitAnimations(context, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-    }
-    val customTabsIntent = builder.build()
-    customTabsIntent.launchUrl(context, url.toUri())
 }
 
 @Composable
@@ -201,7 +190,7 @@ fun VolumeInformation(exchange: Exchange) {
                 .padding(20.dp)
         ) {
             Text(
-                text = "Informações de Volume",
+                text = stringResource(R.string.exchange_details_group_data_volume),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -210,18 +199,18 @@ fun VolumeInformation(exchange: Exchange) {
             Spacer(modifier = Modifier.height(16.dp))
 
             DetailRow(
-                label = "Volume 24h (USD)",
-                value = formatCurrencyAbbreviated(exchange.volume1dayUsd)
+                label = stringResource(R.string.exchange_details_volume_24h),
+                value = formatCurrencyAbbreviated(exchange.volume1dayUsd) ?: stringResource(commonPresentation.string.not_applicable_abbreviation)
             )
 
             DetailRow(
-                label = "Volume 1h (USD)",
-                value = formatCurrencyAbbreviated(exchange.volume1hrsUsd)
+                label = stringResource(R.string.exchange_details_volume_1h),
+                value = formatCurrencyAbbreviated(exchange.volume1hrsUsd) ?: stringResource(commonPresentation.string.not_applicable_abbreviation)
             )
 
             DetailRow(
-                label = "Volume 30d (USD)",
-                value = formatCurrencyAbbreviated(exchange.volume1mthUsd)
+                label = stringResource(R.string.exchange_details_volume_30d),
+                value = formatCurrencyAbbreviated(exchange.volume1mthUsd) ?: stringResource(commonPresentation.string.not_applicable_abbreviation)
             )
         }
     }
@@ -240,7 +229,7 @@ fun DataInformation(exchange: Exchange) {
                 .padding(20.dp)
         ) {
             Text(
-                text = "Informações de Dados",
+                text = stringResource(R.string.exchange_details_group_data),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -249,65 +238,37 @@ fun DataInformation(exchange: Exchange) {
             Spacer(modifier = Modifier.height(16.dp))
 
             DetailRow(
-                label = "Símbolos Disponíveis",
-                value = exchange.dataSymbolsCount?.toString() ?: "N/A"
+                label = stringResource(R.string.exchange_details_symbols),
+                value = exchange.dataSymbolsCount?.toString() ?: stringResource(commonPresentation.string.not_applicable_abbreviation)
             )
 
             exchange.dataQuoteStart?.let {
                 DetailRow(
-                    label = "Início dos Dados",
-                    value = formatIsoDate(it)
+                    label = stringResource(R.string.exchange_details_data_start),
+                    value = formatIsoDate(it) ?: stringResource(commonPresentation.string.validation_invalid_date)
                 )
             }
 
             exchange.dataQuoteEnd?.let {
                 DetailRow(
-                    label = "Fim dos Dados",
-                    value = formatIsoDate(it)
+                    label = stringResource(R.string.exchange_details_data_end),
+                    value = formatIsoDate(it) ?: stringResource(commonPresentation.string.not_applicable_abbreviation)
                 )
             }
 
             exchange.dataTradeStart?.let {
                 DetailRow(
-                    label = "Início Trading",
-                    value = formatIsoDate(it)
+                    label = stringResource(R.string.exchange_details_trading_start),
+                    value = formatIsoDate(it) ?: stringResource(commonPresentation.string.validation_invalid_date)
                 )
             }
 
             exchange.dataTradeEnd?.let {
                 DetailRow(
-                    label = "Fim Trading",
-                    value = formatIsoDate(it)
+                    label = stringResource(R.string.exchange_details_trading_end),
+                    value = formatIsoDate(it) ?: stringResource(commonPresentation.string.validation_invalid_date)
                 )
             }
         }
-    }
-}
-
-@Composable
-private fun DetailRow(
-    label: String,
-    value: String,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = 4.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(
-            text = label,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.weight(1f)
-        )
-
-        Text(
-            text = value,
-            style = MaterialTheme.typography.bodyMedium,
-            fontWeight = FontWeight.Medium,
-            color = MaterialTheme.colorScheme.onSurface
-        )
     }
 }

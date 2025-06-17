@@ -23,7 +23,7 @@ class ExchangeMapperTest {
     private val fakeRank = 1.00
 
     @Test
-    fun `should map ExchangeEntity to ExchangeResume`() {
+    fun `should mapper ExchangeEntity to ExchangeResume`() {
         val entity = ExchangeEntity(
             exchangeId = fakeExchangeId,
             name = fakeName,
@@ -50,7 +50,7 @@ class ExchangeMapperTest {
     }
 
     @Test
-    fun `should map ExchangeEntity to Exchange`() {
+    fun `should mapper ExchangeEntity to Exchange`() {
         val entity = ExchangeEntity(
             exchangeId = fakeExchangeId,
             name = fakeName,
@@ -76,7 +76,7 @@ class ExchangeMapperTest {
     }
 
     @Test
-    fun `should map ExchangeDto to ExchangeEntity`() {
+    fun `should mapper ExchangeDto to ExchangeEntity`() {
         val dto = ExchangeDto(
             exchangeId = fakeExchangeId,
             name = fakeName,
@@ -94,7 +94,7 @@ class ExchangeMapperTest {
             rank = fakeRank,
         )
 
-        val entity = dto.toDetail()
+        val entity = dto.toDetail("url")
 
         assertEquals(fakeExchangeId, entity.exchangeId)
         assertEquals(fakeTradeStart, entity.dataTradeStart)

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="button_back">Voltar</string>
+    <string name="button_refresh">Atualizar</string>
+    <string name="error_alert_title">Ops! Algo deu errado</string>
+    <string name="error_button_retry">Tentar Novamente</string>
+    <string name="error_connection_instruction">Sem conexão com a Internet. Verifique sua conexão Wi-Fi ou Dados Móveis.</string>
+    <string name="error_content_description">Erro</string>
+    <string name="error_loading_initial_message">Erro inicial:</string>
+    <string name="error_loading_more_message">Erro ao carregar mais:</string>
+    <string name="error_unknown">Erro desconhecido</string>
+    <string name="loading_message">Carregando...</string>
+    <string name="not_applicable_abbreviation">N/A</string>
+    <string name="validation_invalid_date">Data inválida</string>
+</resources>

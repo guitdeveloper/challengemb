@@ -8,7 +8,6 @@ import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.*
 import org.junit.After
@@ -58,21 +57,14 @@ class ExchangeDetailViewModelTest {
             dataSymbolsCount = 200,
             rank = 1.0
         )
-
-        // Mock do use case retornando um fluxo com sucesso
         coEvery { getExchangeDetailUseCase.invoke(exchangeId) } returns flow {
             emit(Result.success(exchange))
         }
-
         viewModel = ExchangeDetailViewModel(getExchangeDetailUseCase)
 
-        // Chama o método que carrega detalhe
         viewModel.loadExchangeDetail(exchangeId)
-
-        // Avança a execução das coroutines pendentes
         testScheduler.advanceUntilIdle()
 
-        // Verifica se o estado UI foi atualizado para Success com o exchange correto
         val state = viewModel.uiState.value
         assertTrue(state is UiState.Success)
         assertEquals(exchange, (state as UiState.Success).data)
@@ -82,16 +74,12 @@ class ExchangeDetailViewModelTest {
     fun `loadExchangeDetail updates uiState with Error when use case returns failure`() = runTest {
         val exchangeId = "123"
         val exception = Exception("Error loading exchange")
-
-        // Mock do use case retornando fluxo com falha
         coEvery { getExchangeDetailUseCase.invoke(exchangeId) } returns flow {
             emit(Result.failure(exception))
         }
-
         viewModel = ExchangeDetailViewModel(getExchangeDetailUseCase)
 
         viewModel.loadExchangeDetail(exchangeId)
-
         testScheduler.advanceUntilIdle()
 
         val state = viewModel.uiState.value
@@ -102,15 +90,10 @@ class ExchangeDetailViewModelTest {
     @Test
     fun `retry calls loadExchangeDetail`() = runTest {
         val exchangeId = "123"
-
         coEvery { getExchangeDetailUseCase.invoke(exchangeId) } returns flow {
             emit(Result.success(mockk()))
         }
-
         viewModel = ExchangeDetailViewModel(getExchangeDetailUseCase)
-
-        // spy ou mock é mais complexo aqui, então só testamos que retry chama loadExchangeDetail
-        // executando loadExchangeDetail duas vezes no teste, o estado deve ser atualizado sem erros
 
         viewModel.loadExchangeDetail(exchangeId)
         testScheduler.advanceUntilIdle()
@@ -118,7 +101,6 @@ class ExchangeDetailViewModelTest {
         val firstState = viewModel.uiState.value
         assertTrue(firstState is UiState.Success)
 
-        // Chama retry (que chama loadExchangeDetail novamente)
         viewModel.retry(exchangeId)
         testScheduler.advanceUntilIdle()
 

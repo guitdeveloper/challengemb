@@ -39,7 +39,6 @@ android {
         jvmTarget = "17"
     }
     testOptions {
-        // execution = "ANDROIDX_TEST_ORCHESTRATOR"
         animationsDisabled = true
         unitTests {
             isReturnDefaultValues = true
@@ -52,13 +51,13 @@ android {
 }
 
 dependencies {
-//    api(libs.test.rules)
     api(libs.test.assertj.core)
     api(libs.test.compose.junit4)
     api(libs.test.core.testing)
     api(libs.test.coroutines)
     api(libs.test.espresso.contrib)
     api(libs.test.espresso.core)
+    api(libs.test.espresso.intents)
     api(libs.test.junit.ext)
     api(libs.test.junit.platform)
     api(libs.test.junit.v4.core)
@@ -66,15 +65,14 @@ dependencies {
     api(libs.test.junit5.api)
     api(libs.test.junit5.engine)
     api(libs.test.junit5.params)
-//    api(libs.test.koin.test)
+    api(libs.test.koin)
+    api(libs.test.koin.junit4)
     api(libs.test.mannodermaus.junit5.core)
     api(libs.test.mannodermaus.junit5.runner)
     api(libs.test.mockito.inline)
     api(libs.test.mockito.kotlin)
     api(libs.test.mockk)
     api(libs.test.mockk.android)
-    api(libs.test.robolectric)
     api(libs.test.room.testing)
-//    api(libs.test.runner)
     api(libs.test.turbine)
 }

@@ -18,8 +18,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import br.com.challenge.core.presentation.R
 
 @Composable
 fun ErrorComponent(
@@ -31,13 +33,13 @@ fun ErrorComponent(
         modifier = modifier
             .fillMaxSize()
             .padding(24.dp)
-            .testTag("error"),
+            .testTag(ERROR),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Icon(
             imageVector = Icons.Default.Close,
-            contentDescription = "Erro",
+            contentDescription = stringResource(R.string.error_content_description),
             tint = MaterialTheme.colorScheme.error,
             modifier = Modifier.size(64.dp)
         )
@@ -45,7 +47,7 @@ fun ErrorComponent(
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "Ops! Algo deu errado",
+            text = stringResource(R.string.error_alert_title),
             style = MaterialTheme.typography.headlineSmall,
             color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center
@@ -68,7 +70,7 @@ fun ErrorComponent(
                 containerColor = MaterialTheme.colorScheme.primary
             )
         ) {
-            Text("Tentar Novamente")
+            Text(stringResource(R.string.error_button_retry))
         }
     }
 }

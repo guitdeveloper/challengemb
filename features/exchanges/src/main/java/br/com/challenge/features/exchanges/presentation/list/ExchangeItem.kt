@@ -19,11 +19,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import br.com.challenge.core.common.CurrencyUtils.formatCurrencyAbbreviated
 import br.com.challenge.features.exchanges.R
+import br.com.challenge.core.presentation.R as commonPresentation
 import br.com.challenge.features.exchanges.domain.ExchangeResume
 
 @Composable
@@ -65,7 +67,7 @@ fun ExchangeItem(
                         .padding(2.dp)
                 ) {
                     Text(
-                        text = exchange.name ?: "Nome não disponível",
+                        text = exchange.name ?: stringResource(R.string.exchange_name_unknown),
                         style = MaterialTheme.typography.headlineMedium,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface
@@ -82,12 +84,12 @@ fun ExchangeItem(
                     Spacer(modifier = Modifier.height(12.dp))
 
                     Text(
-                        text = "Volume 24h (USD)",
+                        text = stringResource(R.string.exchange_details_volume_24h),
                         style = MaterialTheme.typography.labelLarge,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
-                        text = formatCurrencyAbbreviated(exchange.volume1dayUsd),
+                        text = formatCurrencyAbbreviated(exchange.volume1dayUsd) ?: stringResource(commonPresentation.string.not_applicable_abbreviation),
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.primary
