@@ -28,6 +28,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -35,7 +36,7 @@ import androidx.compose.ui.unit.dp
 import org.koin.androidx.compose.koinViewModel
 import br.com.challenge.core.common.CurrencyUtils.formatCurrencyAbbreviated
 import br.com.challenge.core.common.DateUtils.formatIsoDate
-import br.com.challenge.core.network.di.ApiConfig
+import br.com.challenge.core.network.ApiConfig
 import br.com.challenge.core.presentation.component.DetailRow
 import br.com.challenge.core.presentation.component.ErrorComponent
 import br.com.challenge.core.presentation.component.LoadingComponent
@@ -43,7 +44,8 @@ import br.com.challenge.core.presentation.state.UiState
 import br.com.challenge.core.presentation.utils.ChromeCustomTabNavigator
 import br.com.challenge.features.exchanges.R
 import br.com.challenge.core.presentation.R as commonPresentation
-import br.com.challenge.features.exchanges.domain.Exchange
+import br.com.challenge.features.exchanges.domain.model.Exchange
+import br.com.challenge.features.exchanges.presentation.EXCHANGE_DETAIL
 import org.koin.compose.getKoin
 import org.koin.core.parameter.parametersOf
 
@@ -120,7 +122,8 @@ private fun ExchangeDetailContent(
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(16.dp),
+            .padding(16.dp)
+            .testTag(EXCHANGE_DETAIL),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Header(exchange)

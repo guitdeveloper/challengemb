@@ -36,16 +36,11 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.datastore)
+    implementation(libs.koin.android)
+    implementation(libs.koin.core)
     implementation(libs.material)
     implementation(libs.retrofit)
 
     testImplementation(libs.test.robolectric)
     testImplementation(project(":core:tests"))
-}
-
-tasks.withType<Test> {
-    useJUnitPlatform()
-    testLogging {
-        events("passed", "skipped", "failed")
-    }
 }

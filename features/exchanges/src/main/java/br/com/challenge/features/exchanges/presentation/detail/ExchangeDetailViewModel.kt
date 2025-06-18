@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.challenge.core.presentation.state.UiState
-import br.com.challenge.features.exchanges.domain.Exchange
+import br.com.challenge.features.exchanges.domain.model.Exchange
 import br.com.challenge.features.exchanges.domain.usecase.GetExchangeDetailUseCase
 import kotlinx.coroutines.launch
 

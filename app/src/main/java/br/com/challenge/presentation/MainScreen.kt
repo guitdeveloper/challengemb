@@ -8,13 +8,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.navigation.compose.rememberNavController
 import br.com.challenge.ui.theme.ChallengeTheme
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun MainScreen() {
-    val viewModel: MainViewModel = koinViewModel()
+fun MainScreen(
+    viewModel: MainViewModel = koinViewModel()
+) {
     val apiConfig by viewModel.apiConfig.collectAsState()
 
     ChallengeTheme {
@@ -23,7 +25,7 @@ fun MainScreen() {
             AppNavHost(navController, apiConfig!!)
         } else {
             Box(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxSize().testTag(LOADING_INDICATOR),
                 contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator()

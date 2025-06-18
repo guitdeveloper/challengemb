@@ -1,4 +1,4 @@
-package br.com.challenge.features.exchanges.domain
+package br.com.challenge.features.exchanges.domain.model
 
 data class ExchangeResume(
     val exchangeId: String,

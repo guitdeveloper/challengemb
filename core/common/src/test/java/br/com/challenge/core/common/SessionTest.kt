@@ -1,36 +1,65 @@
 package br.com.challenge.core.common
 
-import android.content.Context
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.test.core.app.ApplicationProvider
-import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
+import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
-import kotlinx.coroutines.flow.first
-import org.junit.Assert.assertEquals
+import java.util.UUID
 
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [30])
 class SessionTest {
 
-    private val context: Context = ApplicationProvider.getApplicationContext()
+    private lateinit var session: Session
 
-    @Test
-    fun `saves and getApiKey returns the saved value`() = runTest {
-        val apiKey = "api_key"
-        Session.saveApiKey(context, apiKey)
+    @Before
+    fun setup() {
+        val context = ApplicationProvider.getApplicationContext<android.content.Context>()
+        val testFile = context.preferencesDataStoreFile("test_prefs_${UUID.randomUUID()}")
 
-        val savedKey = Session.getApiKey(context).first()
-        assertEquals(apiKey, savedKey)
+        val dataStore = PreferenceDataStoreFactory.create(
+            produceFile = { testFile }
+        )
+
+        session = Session(dataStore)
     }
 
     @Test
-    fun `saves and getApiBaseUrl returns the saved value`() = runTest {
-        val baseUrl = "https://api.com.br"
-        Session.saveApiBaseUrl(context, baseUrl)
+    fun `should save and retrieve API key correctly`() = runBlocking {
+        val expectedApiKey = "my-secret-key"
 
-        val savedBaseUrl = Session.getApiBaseUrl(context).first()
-        assertEquals(baseUrl, savedBaseUrl)
+        session.saveApiKey(expectedApiKey)
+        val actualApiKey = session.getApiKey().first()
+
+        assertEquals(expectedApiKey, actualApiKey)
+    }
+
+    @Test
+    fun `should save and retrieve API base URL correctly`() = runBlocking {
+        val expectedUrl = "https://api.example.com"
+
+        session.saveApiBaseUrl(expectedUrl)
+        val actualUrl = session.getApiBaseUrl().first()
+
+        assertEquals(expectedUrl, actualUrl)
+    }
+
+    @Test
+    fun `should return empty string if API base URL not set`() = runBlocking {
+        val url = session.getApiBaseUrl().first()
+
+        assertEquals("", url)
+    }
+
+    @Test
+    fun `should return empty string if API key not set`() = runBlocking {
+        val key = session.getApiKey().first()
+
+        assertEquals("", key)
     }
 }

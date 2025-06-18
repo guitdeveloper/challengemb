@@ -1,16 +1,21 @@
 package br.com.challenge.features.exchanges.presentation.list
 
+import androidx.paging.AsyncPagingDataDiffer
 import androidx.paging.PagingSource
-import app.cash.turbine.test
+import androidx.paging.PagingState
+import br.com.challenge.core.database.entity.ExchangeEntity
 import br.com.challenge.core.presentation.state.UiState
 import br.com.challenge.features.exchanges.domain.usecase.FetchExchangesUseCase
 import br.com.challenge.features.exchanges.domain.usecase.GetPagedExchangesUseCase
+import br.com.challenge.features.exchanges.fixtures.createExchangeEntityFixture
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.*
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -66,17 +71,42 @@ class ExchangeViewModelTest {
 
     @Test
     fun `items flow emits PagingData`() = runTest {
-        val pagingSource = mockk<PagingSource<Int, br.com.challenge.core.database.entity.ExchangeEntity>>()
+        val pagingSource = object : PagingSource<Int, ExchangeEntity>() {
+            override fun getRefreshKey(state: PagingState<Int, ExchangeEntity>): Int? = null
+
+            override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ExchangeEntity> {
+                return LoadResult.Page(
+                    data = listOf(createExchangeEntityFixture()),
+                    prevKey = null,
+                    nextKey = null
+                )
+            }
+        }
+
         every { getPagedExchangesUseCase.invoke() } returns pagingSource
         coEvery { fetchExchangesUseCase.invoke() } returns flowOf(Result.success(true))
 
         viewModel = ExchangeViewModel(fetchExchangesUseCase, getPagedExchangesUseCase)
 
-        viewModel.items.test {
-            val emission = awaitItem()
-            //assertTrue(emission is PagingData)
-            cancelAndIgnoreRemainingEvents()
+        val differ = AsyncPagingDataDiffer(
+            diffCallback = ExchangeResumeDiffCallback(),
+            updateCallback = NoopListCallback(),
+            mainDispatcher = StandardTestDispatcher(testScheduler),
+            workerDispatcher = StandardTestDispatcher(testScheduler),
+        )
+
+        val job = launch {
+            viewModel.items.collectLatest {
+                differ.submitData(it)
+            }
         }
+
+        advanceUntilIdle()
+
+        assertEquals(1, differ.itemCount)
+        assertEquals("binance", differ.snapshot()[0]?.exchangeId)
+
+        job.cancel()
     }
 
     @Test

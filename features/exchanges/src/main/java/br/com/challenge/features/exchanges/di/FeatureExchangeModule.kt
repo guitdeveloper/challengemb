@@ -1,6 +1,6 @@
 package br.com.challenge.features.exchanges.di
 
-import br.com.challenge.core.network.di.ApiConfig
+import br.com.challenge.core.network.ApiConfig
 import br.com.challenge.core.presentation.utils.ChromeCustomTabNavigator
 import br.com.challenge.features.exchanges.data.repository.ExchangeRepositoryImpl
 import br.com.challenge.features.exchanges.domain.repository.ExchangeRepository

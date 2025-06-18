@@ -2,7 +2,7 @@ package br.com.challenge.features.exchanges.presentation.detail
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import br.com.challenge.core.presentation.state.UiState
-import br.com.challenge.features.exchanges.domain.Exchange
+import br.com.challenge.features.exchanges.domain.model.Exchange
 import br.com.challenge.features.exchanges.domain.usecase.GetExchangeDetailUseCase
 import io.mockk.coEvery
 import io.mockk.mockk

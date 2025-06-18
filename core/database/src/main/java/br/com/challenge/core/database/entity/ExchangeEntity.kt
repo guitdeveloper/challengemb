@@ -6,9 +6,9 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "exchanges")
 data class ExchangeEntity(
     @PrimaryKey val exchangeId: String,
-    val name: String?,
-    val websiteUrl: String?,
-    val volume1dayUsd: Double?,
+    val name: String? = null,
+    val websiteUrl: String? = null,
+    val volume1dayUsd: Double? = null,
     val volume1hrsUsd: Double? = null,
     val volume1mthUsd: Double? = null,
     val dataQuoteStart: String? = null,

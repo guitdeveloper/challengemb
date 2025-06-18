@@ -22,20 +22,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import br.com.challenge.core.network.di.ApiConfig
+import br.com.challenge.core.network.ApiConfig
 import br.com.challenge.core.network.exception.NoConnectivityException
 import br.com.challenge.core.presentation.component.LoadingComponent
 import br.com.challenge.core.presentation.component.ErrorComponent
 import br.com.challenge.core.presentation.state.UiState
 import br.com.challenge.features.exchanges.R
 import br.com.challenge.core.presentation.R as commonPresentation
-import br.com.challenge.features.exchanges.domain.ExchangeResume
+import br.com.challenge.features.exchanges.domain.model.ExchangeResume
+import br.com.challenge.features.exchanges.presentation.EXCHANGE_LIST
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -55,6 +57,7 @@ fun ExchangeListScreen(
             TopAppBar(
                 title = {
                     Text(
+                        modifier = Modifier.testTag(EXCHANGE_LIST),
                         text = stringResource(R.string.exchange_list_title),
                         style = MaterialTheme.typography.headlineSmall
                     )
@@ -94,7 +97,9 @@ fun ExchangeListScreen(
                 ErrorComponent(
                     message = if (state.exception is NoConnectivityException) {
                         stringResource(commonPresentation.string.error_connection_instruction)
-                    } else stringResource(commonPresentation.string.error_unknown),
+                    } else {
+                        state.exception.message ?: stringResource(commonPresentation.string.error_unknown)
+                    },
                     onRetry = { viewModel.retry() },
                     modifier = Modifier.padding(paddingValues)
                 )
@@ -114,7 +119,7 @@ fun ListExchanges(
             .fillMaxSize()
             .padding(paddingValues),
         contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         items(count = pagedItems.itemCount) { index ->
             val item = pagedItems[index]

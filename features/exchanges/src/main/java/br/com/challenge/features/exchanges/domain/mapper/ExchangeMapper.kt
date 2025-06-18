@@ -2,8 +2,8 @@ package br.com.challenge.features.exchanges.domain.mapper
 
 import br.com.challenge.core.database.entity.ExchangeEntity
 import br.com.challenge.core.service.dto.ExchangeDto
-import br.com.challenge.features.exchanges.domain.Exchange
-import br.com.challenge.features.exchanges.domain.ExchangeResume
+import br.com.challenge.features.exchanges.domain.model.Exchange
+import br.com.challenge.features.exchanges.domain.model.ExchangeResume
 
 fun ExchangeEntity.toResume() =
     ExchangeResume(

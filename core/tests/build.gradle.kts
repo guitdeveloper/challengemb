@@ -73,6 +73,7 @@ dependencies {
     api(libs.test.mockito.kotlin)
     api(libs.test.mockk)
     api(libs.test.mockk.android)
+    api(libs.test.navigation)
     api(libs.test.room.testing)
     api(libs.test.turbine)
 }

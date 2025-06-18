@@ -1,10 +1,10 @@
-package br.com.challenge.features.exchanges.domain
+package br.com.challenge.features.exchanges.domain.model
 
 data class Exchange(
     val exchangeId: String,
-    val name: String?,
-    val websiteUrl: String?,
-    val volume1dayUsd: Double?,
+    val name: String? = null,
+    val websiteUrl: String? = null,
+    val volume1dayUsd: Double? = null,
     val volume1hrsUsd: Double? = null,
     val volume1mthUsd: Double? = null,
     val dataQuoteStart: String? = null,

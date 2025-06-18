@@ -68,8 +68,8 @@ O projeto foi modularizado em 3 módulos principais:
 - Injeção de dependência de ponta a ponta
 - Representação dos estados de UI (Loading, Success e Error)
 - Otimização de compilação e build do projeto
-- Modularização da aplicação em multi mõdulos
-- Chamada da API de exchanges somente quando houver a expiração do cache de 10 minutos
+- Modularização da aplicação em multi módulos
+- Chamada da API de exchanges somente quando houver a expiração do cache
 - Mapeamentos entre os objetos de entidade, dto e de domínio
 - Implementação de Use Cases para buscar dados na API, dados paginados no banco de dados e detalhes de uma exchange
 - ViewModels para separar lógica da UI, expor dados observáveis e gerenciar tarefas assíncronas
@@ -77,6 +77,7 @@ O projeto foi modularizado em 3 módulos principais:
 - Service para abstrair a API
 - Separação de ambientes
 - Testes unitários e de interface
+- Inclusão de strings nos resources
 
 ## Próximos passos
 - Criar backend para fazer as requisições por autenticação com token por JWT e OAuth2 nas APIs, assim não precisa expor a chave da API também e criaria um sistema mais seguro e resiliente com fallbacks e circuite break
@@ -88,7 +89,6 @@ O projeto foi modularizado em 3 módulos principais:
 - Integração com Firebase Crashlytics
 - Integração com Analytics
 - Integração com SonarQube
-- Adicionar strings em resources
 - Observabilidade com Datadog
 - Aplicar acessibilidade nas telas
 - Criar regras de ofuscação no Proguard

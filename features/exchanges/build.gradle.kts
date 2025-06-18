@@ -79,10 +79,3 @@ dependencies {
     androidTestImplementation(project(":core:tests"))
     testImplementation(project(":core:tests"))
 }
-
-tasks.withType<Test> {
-    useJUnitPlatform()
-    testLogging {
-        events("passed", "skipped", "failed")
-    }
-}

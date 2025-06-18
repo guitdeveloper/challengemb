@@ -1,6 +1,6 @@
 package br.com.challenge.features.exchanges.domain.usecase
 
-import br.com.challenge.features.exchanges.domain.Exchange
+import br.com.challenge.features.exchanges.domain.model.Exchange
 import br.com.challenge.features.exchanges.domain.repository.ExchangeRepository
 import kotlinx.coroutines.flow.Flow
 

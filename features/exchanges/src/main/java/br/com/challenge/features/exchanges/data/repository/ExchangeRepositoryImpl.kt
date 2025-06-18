@@ -4,9 +4,11 @@ import br.com.challenge.core.database.dao.ExchangeDao
 import br.com.challenge.core.database.entity.ExchangeEntity
 import br.com.challenge.core.service.api.ExchangeApiService
 import br.com.challenge.core.service.dto.ExchangeIconDto
-import br.com.challenge.features.exchanges.domain.Exchange
+import br.com.challenge.core.service.dto.ResponseError
+import br.com.challenge.features.exchanges.domain.model.Exchange
 import br.com.challenge.features.exchanges.domain.mapper.toDetail
 import br.com.challenge.features.exchanges.domain.repository.ExchangeRepository
+import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -16,7 +18,7 @@ class ExchangeRepositoryImpl(
 ) : ExchangeRepository {
 
     companion object {
-        private const val CACHE_EXPIRATION_TIME = 10 * 60 * 1000L
+        private const val CACHE_EXPIRATION_TIME = 5 * 60 * 1000L
         private const val ICON_SIZE = 64
     }
 
@@ -29,13 +31,9 @@ class ExchangeRepositoryImpl(
     override suspend fun getExchangeById(
         exchangeId: String
     ): Flow<Result<Exchange>> = flow {
-        try {
-            exchangeDao.getExchangeBy(exchangeId)?.let {
-                emit(Result.success(it.toDetail()))
-            } ?: emit(Result.failure(Exception("Exchange não encontrada para exchange ID '$exchangeId'")))
-        } catch (e: Exception) {
-            emit(Result.failure(e))
-        }
+        exchangeDao.getExchangeBy(exchangeId)?.let {
+            emit(Result.success(it.toDetail()))
+        } ?: emit(Result.failure(Exception("Exchange não encontrada para exchange ID '$exchangeId'")))
     }
 
     override suspend fun fetchExchanges(): Result<Boolean> {
@@ -53,14 +51,19 @@ class ExchangeRepositoryImpl(
                 it.toDetail(iconUrl)
             } ?: emptyList()
             if (list.isNotEmpty()) {
-                exchangeDao.removeAll()
                 exchangeDao.insertAll(entities)
             }
             Result.success(true)
         } else {
-            Result.failure(
-                Exception("Falha na API: ${exchangesResponse.code()} - ${exchangesResponse.message()}")
-            )
+            var error: String? = exchangesResponse.message()
+            exchangesResponse.errorBody()?.let {
+                error = try {
+                    Gson().fromJson(it.string(), ResponseError::class.java).error
+                } catch (e: Exception) {
+                    null
+                }
+            }
+            Result.failure(Exception(error))
         }
     }
 

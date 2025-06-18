@@ -12,8 +12,9 @@ class FetchExchangesUseCase(
             val count = repository.getCount()
             if (count == 0 || repository.isCacheExpired(repository.first())) {
                 emit(repository.fetchExchanges())
+            } else {
+                emit(Result.success(true))
             }
-            emit(Result.success(true))
         } catch (e: Exception) {
             emit(Result.failure(e))
         }

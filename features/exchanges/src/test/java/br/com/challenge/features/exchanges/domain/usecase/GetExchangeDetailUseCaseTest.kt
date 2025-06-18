@@ -1,17 +1,15 @@
 package br.com.challenge.features.exchanges.domain.usecase
 
-import br.com.challenge.features.exchanges.domain.Exchange
+import br.com.challenge.features.exchanges.domain.model.Exchange
 import br.com.challenge.features.exchanges.domain.repository.ExchangeRepository
 import io.mockk.coEvery
 import io.mockk.mockk
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class GetExchangeDetailUseCaseTest {
 
     private val repository = mockk<ExchangeRepository>()

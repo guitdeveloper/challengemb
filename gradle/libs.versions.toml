@@ -99,6 +99,7 @@ test-mannodermaus-junit-v5-plugin = { group = "de.mannodermaus.gradle.plugins", 
 test-mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockitoCore" }
 test-mockito-inline = { group = "org.mockito", name = "mockito-inline", version.ref = "mockitoInline" }
 test-mockito-kotlin = { group = "com.nhaarman.mockitokotlin2", name = "mockito-kotlin", version.ref = "mockito" }
+test-navigation = { group = "androidx.navigation", name = "navigation-testing", version.ref = "navigationCompose" }
 test-mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 test-mockk_android = { group = "io.mockk", name = "mockk-android", version.ref = "mockk" }
 test-powermock-junit4 = { group = "org.powermock", name = "powermock-module-junit4", version.ref = "powerMock" }

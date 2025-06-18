@@ -2,7 +2,7 @@ package br.com.challenge.features.exchanges.domain.repository
 
 import androidx.paging.PagingSource
 import br.com.challenge.core.database.entity.ExchangeEntity
-import br.com.challenge.features.exchanges.domain.Exchange
+import br.com.challenge.features.exchanges.domain.model.Exchange
 import kotlinx.coroutines.flow.Flow
 
 interface ExchangeRepository {

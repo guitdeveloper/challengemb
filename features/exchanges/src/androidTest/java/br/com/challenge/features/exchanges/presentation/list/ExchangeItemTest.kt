@@ -3,7 +3,7 @@ package br.com.challenge.features.exchanges.presentation.list
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import br.com.challenge.features.exchanges.domain.ExchangeResume
+import br.com.challenge.features.exchanges.domain.model.ExchangeResume
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith

@@ -26,7 +26,7 @@ import coil.compose.AsyncImage
 import br.com.challenge.core.common.CurrencyUtils.formatCurrencyAbbreviated
 import br.com.challenge.features.exchanges.R
 import br.com.challenge.core.presentation.R as commonPresentation
-import br.com.challenge.features.exchanges.domain.ExchangeResume
+import br.com.challenge.features.exchanges.domain.model.ExchangeResume
 
 @Composable
 fun ExchangeItem(
@@ -59,7 +59,7 @@ fun ExchangeItem(
                     modifier = Modifier.size(64.dp)
                 )
 
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(16.dp))
 
                 Column(
                     modifier = Modifier

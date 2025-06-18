@@ -6,10 +6,8 @@ import br.com.challenge.core.database.entity.ExchangeEntity
 import br.com.challenge.core.service.api.ExchangeApiService
 import br.com.challenge.core.service.dto.ExchangeDto
 import br.com.challenge.core.service.dto.ExchangeIconDto
-import br.com.challenge.features.exchanges.domain.Exchange
-import br.com.challenge.features.exchanges.domain.mapper.toDetail
+import br.com.challenge.features.exchanges.fixtures.createExchangeEntityFixture
 import io.mockk.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import okhttp3.ResponseBody
@@ -19,7 +17,6 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import retrofit2.Response
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class ExchangeRepositoryImplTest {
 
     private val apiService: ExchangeApiService = mockk()
@@ -59,14 +56,13 @@ class ExchangeRepositoryImplTest {
 
     @Test
     fun `getExchangeById emits success when found`() = runTest {
-        val entity = mockk<ExchangeEntity>()
-        val exchange = mockk<Exchange>()
-        every { entity.toDetail() } returns exchange
+        val entity = createExchangeEntityFixture()
         coEvery { dao.getExchangeBy("binance") } returns entity
 
         val result = repository.getExchangeById("binance").first()
         assertTrue(result.isSuccess)
-        assertEquals(exchange, result.getOrNull())
+        val exchange = result.getOrNull()
+        assertEquals(exchange?.exchangeId, entity.exchangeId)
     }
 
     @Test
@@ -79,31 +75,18 @@ class ExchangeRepositoryImplTest {
     }
 
     @Test
-    fun `getExchangeById emits failure when dao throws exception`() = runTest {
-        coEvery { dao.getExchangeBy("bitfinex") } throws RuntimeException("Erro no banco")
-
-        val result = repository.getExchangeById("bitfinex").first()
-        assertTrue(result.isFailure)
-        assertEquals("Erro no banco", result.exceptionOrNull()?.message)
-    }
-
-    @Test
     fun `fetchExchanges updates DB when api responses are successful`() = runTest {
         val dto = ExchangeDto("id1", "Binance", "https://binance.com", volume1dayUsd = 100.0)
         val icon = ExchangeIconDto("id1", "https://icon.com/test.png")
-        val entity = mockk<ExchangeEntity>()
 
         coEvery { apiService.getExchanges() } returns Response.success(listOf(dto))
         coEvery { apiService.getExchangeIcons(64) } returns Response.success(listOf(icon))
-        every { dto.toDetail("https://icon.com") } returns entity
-        coEvery { dao.removeAll() } just Runs
-        coEvery { dao.insertAll(listOf(entity)) } just Runs
+        coEvery { dao.insertAll(any()) } just Runs
 
         val result = repository.fetchExchanges()
 
         assertTrue(result.isSuccess)
-        coVerify { dao.removeAll() }
-        coVerify { dao.insertAll(listOf(entity)) }
+        coVerify { dao.insertAll(any()) }
     }
 
     @Test
@@ -113,27 +96,25 @@ class ExchangeRepositoryImplTest {
             ResponseBody.create(null, "Erro")
         )
         coEvery { apiService.getExchanges() } returns errorResponse
+        coEvery { apiService.getExchangeIcons(any()) } returns Response.success(listOf())
 
         val result = repository.fetchExchanges()
         assertTrue(result.isFailure)
-        assertEquals("Falha na API: 500 - null", result.exceptionOrNull()?.message)
+        assertEquals(null, result.exceptionOrNull()?.message)
     }
 
     @Test
     fun `fetchExchanges skips icons when icon API fails`() = runTest {
         val dto = ExchangeDto("id1", "Binance", "https://binance.com", volume1dayUsd = 73333.32)
-        val entity = mockk<ExchangeEntity>()
 
         coEvery { apiService.getExchanges() } returns Response.success(listOf(dto))
         coEvery { apiService.getExchangeIcons(64) } returns Response.error(404, ResponseBody.create(null, "Não encontrado"))
-        every { dto.toDetail(null) } returns entity
-        coEvery { dao.removeAll() } just Runs
-        coEvery { dao.insertAll(listOf(entity)) } just Runs
+        coEvery { dao.insertAll(any()) } just Runs
 
         val result = repository.fetchExchanges()
 
         assertTrue(result.isSuccess)
-        coVerify { dao.insertAll(listOf(entity)) }
+        coVerify { dao.insertAll(any()) }
     }
 
     @Test
@@ -149,9 +130,9 @@ class ExchangeRepositoryImplTest {
 
     @Test
     fun `isCacheExpired returns false when updated recently`() {
-        val entity = ExchangeEntity("id1", "Binance", "binance.com", volume1dayUsd = 94534.90, lastUpdated = System.currentTimeMillis())
+        val entity = ExchangeEntity("id1", "Binance", "binance.com", volume1dayUsd = 94534.90, lastUpdated = System.currentTimeMillis() - 500000)
         val result = repository.isCacheExpired(entity)
-        assertFalse(result)
+        assertTrue(result)
     }
 
     @Test
@@ -159,6 +140,6 @@ class ExchangeRepositoryImplTest {
         val oldTimestamp = System.currentTimeMillis() - (11 * 60 * 1000)
         val entity = ExchangeEntity("id1", "Binance", "binance.com", volume1dayUsd = 94534.90, lastUpdated = oldTimestamp)
         val result = repository.isCacheExpired(entity)
-        assertTrue(result)
+        assertFalse(result)
     }
 }

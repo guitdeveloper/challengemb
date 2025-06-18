@@ -12,14 +12,19 @@ plugins {
 }
 
 subprojects {
-    plugins.withId("org.jetbrains.kotlin.jvm") {
+    if (plugins.hasPlugin("com.android.application")
+        || plugins.hasPlugin("com.android.library")
+        || plugins.hasPlugin("org.jetbrains.kotlin.jvm")) {
         apply(plugin = "org.jetbrains.kotlinx.kover")
 
         tasks.withType<Test> {
             useJUnitPlatform()
+            testLogging {
+                events("passed", "skipped", "failed")
+            }
         }
     }
-    executeDetekt()
+    configureDetekt()
     afterEvaluate {
         if (plugins.hasPlugin("com.android.application") || plugins.hasPlugin("com.android.library")) {
             configureLintOptions()
@@ -36,7 +41,7 @@ subprojects {
     }
 }
 
-fun Project.executeDetekt() {
+fun Project.configureDetekt() {
     apply(plugin = "io.gitlab.arturbosch.detekt")
 
     extensions.configure<io.gitlab.arturbosch.detekt.extensions.DetektExtension> {
